@@ -1,7 +1,8 @@
 # pip install requests (to be able to get HTML pages and load them into Python)
 # pip install bs4 (for beautifulsoup - python tool to parse HTML)
 
-
+from cgi import test
+from symbol import test_nocond
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 
@@ -17,8 +18,18 @@ from bs4 import BeautifulSoup
 
 url = 'https://www.worldometers.info/coronavirus/country/us'
 # Request in case 404 Forbidden error
+
+
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3'}
 
+req = Request(url, headers=headers)
+webpage = urlopen(req).read()
+
+# this is going to parse webpage based upon those tags # basically just separates the file to know what to extract
+soup = BeautifulSoup(webpage, "html.parser")
+
+title = soup.title
+print(title.text)
 
 
 
@@ -35,3 +46,67 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML
 #Limit = find with limit of 1
 #keyword: allText = Obj.find(id="title",class="text")
 
+
+table_rows = soup.findAll("tr")
+
+state_worst_death = ""
+state_best_death = ""
+high_death_ratio = 0.0
+low_death_ratio = 100.0
+
+state_best_test = ''
+state_worst_test = ''
+high_test_ratio = 0.0
+low_test_ratio = 100.0
+
+# .text method to just only grab the text in the row
+for row in table_rows[2:53]:
+    td = row.findAll("td")
+    print(td[0])
+    state = td[1].text
+    total_cases = int(td[2].text.replace(",",""))
+    total_deaths = int(td[4].text.replace(",",""))
+    total_tests = int(td[10].text.replace(",",""))
+    population = int(td[12].text.replace(",",""))
+
+    death_rate = round((total_deaths / total_cases) * 100,2)
+    test_rate = ((total_tests / population) * 100,2)
+
+    print(state)
+    print(death_rate)
+    print(test_rate)
+
+
+    if death_rate > high_death_ratio:
+        state_worst_death = state
+        high_death_ratio = death_rate
+    
+    if death_rate < low_death_ratio:
+        state_best_death = state
+        low_death_ratio = death_rate
+
+    if test_rate > high_test_ratio:
+        state_best_test = state
+        high_test_ratio = test_rate
+
+    if test_rate < low_test_ratio:
+        state_worst_test = state
+        low_test_ratio = test_rate
+
+
+print(f"State with the worst death rate {state_worst_death}")
+print(f"Death rate: {high_death_ratio}%")
+print()
+print()
+print(f"State with the best death rate {state_best_death}")
+print(f"Death rate: {low_death_ratio}%")
+
+
+print(f"State with the worst test rate {state_worst_test}")
+print(f"Test rate: {high_test_ratio}%")
+print()
+print()
+print(f"State with the best test rate {state_best_test}")
+print(f"Test rate: {low_test_ratio}%")
+print()
+print()
