@@ -1,6 +1,9 @@
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 import csv
+import keys2
+from twilio.rest import Client
+
 
 url = 'https://www.investing.com/crypto/'
 # Request in case 404 Forbidden error
@@ -31,10 +34,6 @@ for row in table_rows[1:6]:
     print()
     print()
     input()
-
-#Text Message Section
-import keys2
-from twilio.rest import Client
 
 client = Client(keys2.accountSID,keys2.authToken)
 
