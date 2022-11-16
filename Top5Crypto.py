@@ -11,7 +11,6 @@ req = Request(url, headers=headers)
 webpage = urlopen(req).read()
 
 soup = BeautifulSoup(webpage, 'html.parser')
-
 table_rows = soup.findAll("tr")
 
 for row in table_rows[1:6]:

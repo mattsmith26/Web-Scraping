@@ -85,11 +85,17 @@ for x in range(5):
     counter += 11
 
 
-#while count <= 5:
-    #calc = ((float(tablecells[high].text)) - float(tablecells[low].text) / float(tablecells[low].text)) * 100
-    #print(f' Name: {tablecells[name].text} || High: {tablecells[high].text} || Low: {tablecells[low].text}')
-    #print(calc)
-    #name += 11
-    #high += 11
-    #low += 11
-    #count += 1
+name = 1
+high = 5
+low = 6
+
+count = 1
+
+while count <= 5:
+    calc = ((float(tablecells[high].text)) - float(tablecells[low].text) / float(tablecells[low].text)) * 100
+    print(f' Name: {tablecells[name].text} || High: {tablecells[high].text} || Low: {tablecells[low].text}')
+    print(calc)
+    name += 11
+    high += 11
+    low += 11
+    count += 1
